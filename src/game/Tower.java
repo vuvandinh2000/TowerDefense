@@ -36,7 +36,7 @@ abstract public class Tower
 		position = c;
 	}
 	
-	abstract void interact(Game game, double deltaTime);
+	abstract void interact(GameField game, double deltaTime);
 }
 
 

@@ -18,7 +18,7 @@ abstract public class Effect
 	protected double ageInSeconds;
 	protected Image picture;
 	
-	public void interact(Game game, double deltaTime)
+	public void interact(GameField game, double deltaTime)
 	{
 		// Increments time
 		ageInSeconds += deltaTime;
@@ -28,8 +28,8 @@ abstract public class Effect
 		posY += velocityY*deltaTime;
 		
 		// see if stardust hit enemy
-		List<QuanDich> enemies = game.enemies;
-		for(QuanDich e: new LinkedList<QuanDich>(enemies))
+		List<Enemy> enemies = game.enemies;
+		for(Enemy e: new LinkedList<Enemy>(enemies))
 		{
 			// Compute distance of enemy to effect
 			double dx, dy, dist;	// change in x, y, and total distance

@@ -5,7 +5,7 @@ package game;
  * 
  * @author basilvetas
  */
-public class Comet extends QuanDich
+public class Comet extends Enemy
 {
 	/**
 	 * Constructor

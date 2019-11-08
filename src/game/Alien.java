@@ -1,23 +1,23 @@
 package game;
 
 /**
- * This class creates a single comet enemy
+ * This class creates a single alien enemy
  * 
  * @author basilvetas
  */
-public class Asteroid extends Enemy
+public class Alien extends Enemy 
 {
 	/**
 	 * Constructor
 	 */
-	Asteroid(PathPosition p)
+	Alien(PathPosition p)
 	{
 		ImageLoader loader = ImageLoader.getLoader();
-		this.enemy = loader.getImage("resources/asteroid.png");
+		this.enemy = loader.getImage("resources/Alien-Ship.png");
 		this.position = p;
 		this.anchorX = -20;
 		this.anchorY = -20;
-		this.velocity = 2;
+		this.velocity = 6;
 	}
-	
+
 }

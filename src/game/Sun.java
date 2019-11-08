@@ -24,10 +24,10 @@ public class Sun extends Tower
 	/**
 	 * 
 	 */
-	public void interact(Game game, double deltaTime)
+	public void interact(GameField game, double deltaTime)
 	{
 		
-		List<QuanDich> enemies = game.enemies; // new list of enemies
+		List<Enemy> enemies = game.enemies; // new list of enemies
 		
 		// tracks time that effect has existed
 		timeSinceLastFire += deltaTime;
@@ -37,7 +37,7 @@ public class Sun extends Tower
 			return;
 		
 		// Gives position of an enemy in enemy list
-		for(QuanDich e: enemies)
+		for(Enemy e: enemies)
 		{	
 			// holds position of enemy
 			Coordinate enemyPos = e.getPosition().getCoordinate();

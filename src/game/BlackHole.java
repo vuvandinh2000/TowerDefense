@@ -24,7 +24,7 @@ public class BlackHole extends Tower
 	/**
 	 * 
 	 */
-	public void interact(Game game, double deltaTime)
+	public void interact(GameField game, double deltaTime)
 	{	// tracks time that effect has existed
 		timeSinceLastFire += deltaTime;
 		
@@ -32,10 +32,10 @@ public class BlackHole extends Tower
 		if(timeSinceLastFire < 1)
 			return;
 		
-		List<QuanDich> enemies = game.enemies; // new list of enemies
+		List<Enemy> enemies = game.enemies; // new list of enemies
 		
 		// Gives position of an enemy in enemy list
-		for(QuanDich e: enemies)
+		for(Enemy e: enemies)
 		{	
 			
 			// holds position of enemy

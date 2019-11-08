@@ -11,11 +11,12 @@ import javax.swing.JPanel;
  * The GamePanel class represents the drawable area on the screen.
  * This class is kept simple, and can be used as-is.
  * 
- * @author basilvetas
+ * @author Dinh Jylee
  */
 public class GamePanel extends JPanel implements MouseListener, MouseMotionListener
 {
     /* Static variables */
+   
     /* This static variable is just to avoid an Eclipse warning.  It serves no other purpose (for us). */
     
     private static final long serialVersionUID = -266426690684141363L;
@@ -23,7 +24,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
      
     /* Object fields and methods */
    
-    private Game enclosingGame;  	// A reference back to the Game object that created 'this' object.
+    private GameField enclosingGame;  	// A reference back to the Game object that created 'this' object.
     public int mouseX;				// Tracks X position of mouse events
     public int mouseY;				// Tracks Y position of mouse events
     public boolean mouseIsPressed;	// Determines if mouse has been clicked or not
@@ -37,7 +38,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
      * 
      * @param enclosingGame the Game object that is creating this panel
      */
-    public GamePanel (Game enclosingGame)
+    public GamePanel (GameField enclosingGame)
     {
         // Keep track of the Game object that created this panel.
         //   That way, we can call methods in the game object when needed.
