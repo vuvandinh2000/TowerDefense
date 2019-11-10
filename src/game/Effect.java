@@ -2,8 +2,10 @@ package game;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
+import game.Enemies.Enemy;
 
 /**
  * Abstract class which all Effects will inherit from
@@ -32,22 +34,20 @@ abstract public class Effect
 		for(Enemy e: new LinkedList<Enemy>(enemies))
 		{
 			// Compute distance of enemy to effect
-			double dx, dy, dist;	// change in x, y, and total distance
+			double dx, dy, distance;	// change in x, y, and total distance
 			
 			// calculates change in x and y position 
 			dx = e.position.getCoordinate().x - posX; // x position of enemy - effect 
-			dy = e.position.getCoordinate().y - posY; // y position of enemy - effect 
-			
+			dy = e.position.getCoordinate().y - posY; // y position of enemy - effect
 			// use Pythagorean theorem to calculate distance
-			dist = Math.sqrt((dx*dx) + (dy*dy));
-			
+			distance = Math.sqrt((dx*dx) + (dy*dy));
 			
 			//if enemy is in range of effect, destroy enemy
-			if(dist < 40)	
+			if(distance < 40)
 			{	
 				game.enemies.remove(e);
 				game.scoreCounter += 3;
-				game.killsCounter += 1;
+				game.killsCounter++;
 			}
 		}
 	}
@@ -58,8 +58,8 @@ abstract public class Effect
 		g.drawImage(picture, posX, posY, null);
 		
 		// Draws dot on Effect's (x, y) coordinates
-		//g.setColor(Color.WHITE);
-		//g.fillOval(posX, posY, 5, 5);
+		g.setColor(Color.WHITE);
+		g.fillOval(posX, posY, 5, 5);
 	}
 	
 	public boolean isDone()

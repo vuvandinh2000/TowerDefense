@@ -1,40 +1,43 @@
 package game;
 
+import game.Enemies.Enemy;
 import java.awt.*;
 import java.util.List;
+import game.Towers.*;
+import game.Tile.Road;
 
-/* GameField Class này chứa và quản lý tất cả các GameEntity trên sân chơi*/
+/** GameField: Class này chứa và quản lý tất cả các GameEntity trên sân chơi*/
 public abstract class GameField implements Runnable
 {
-        /* Danh sách các thuộc tính và phương thức */
     protected Image backdrop;				// background
-    protected PathPoints line;			// path coordinates
+    protected Road line;			// path coordinates
     
     protected GamePanel gamePanel;		// đối tượng gamePanel
     
-    
     protected int frameCounter;			// keeps track of frame updates
     protected long lastTime;				// keeps track of time
-    
-    protected boolean placingBlackHole;	// true if tower is being placed
-    protected Tower newBlackHole; 		// variable to hold new tower objects
-    
-    protected boolean placingSun;			// true if tower is being placed
-    protected Tower newSun; 				// variable to hold new tower objects
 
+    protected boolean placingNormalTower;	// true if tower is being placed
+    protected Tower newNormalTower; 		// variable to hold new tower objects
+
+    protected boolean placingMachineGunTower;			// true if tower is being placed
+    protected Tower newMachineGunTower;
+
+    protected boolean placingSniperTower;			// true if tower is being placed
+    protected Tower newSniperTower; 				// variable to hold new tower objects
     
     protected int livesCounter; 					// đếm mạng
     protected int scoreCounter;					// đếm điểm
     protected int killsCounter;					// số lượng quân địch đã giết
     
     /* create enemies */
-    protected List<Enemy> enemies;				// quân địch
+    public List<Enemy> enemies;				// quân địch
     
     /* create towers */
     protected List<Tower> towers;					// tháp chiến đấu
     
     /* create effects */
-    protected List<Effect> effects;				// hiệu ứng
+    public List<Effect> effects;				// hiệu ứng
     
     // You will declare other variables here.  These variables will last for
     //   the lifetime of the game, so don't store temporary values or loop counters
@@ -67,12 +70,9 @@ public abstract class GameField implements Runnable
     /**
      * Method for placing black holes on the screen
      */
-    public abstract void placeBlackHoles();
-    
-    /**
-     * Method for placing suns on the screen
-     */
-    public abstract void placeSuns();
+    public abstract void placeNormalTower();
+    public abstract void placeMachineGunTower();
+    public abstract void placeSniperTower();
     /* Static methods */
     
 

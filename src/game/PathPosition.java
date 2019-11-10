@@ -8,9 +8,6 @@ import java.util.List;
  * 
  * Has three components that make up the position: the path that the object is on, the segment
  * that the object is in, and the percentage across that segment.
- * 
- * @author basilvetas
- * @date 3/27/13
  */
 public class PathPosition
 {	
@@ -24,7 +21,7 @@ public class PathPosition
 	 * 
 	 * @param path
 	 */
-	PathPosition(List<Coordinate> points)
+	public PathPosition(List<Coordinate> points)
 	{	// Initializes variables
 		
 		this.segment = 0;		//starting segment
@@ -52,7 +49,7 @@ public class PathPosition
      * 
      * @return A Coordinate object containing the (x, y) location of this position
      */
-    public Coordinate getCoordinate ()
+    public Coordinate getCoordinate()
     {	
     	if(isAtTheEnd())
     		return path.get(path.size()-1);

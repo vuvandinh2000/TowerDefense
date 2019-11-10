@@ -4,13 +4,11 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-
 import javax.swing.JPanel;
 
 /**
  * The GamePanel class represents the drawable area on the screen.
  * This class is kept simple, and can be used as-is.
- * 
  * @author Dinh Jylee
  */
 public class GamePanel extends JPanel implements MouseListener, MouseMotionListener
@@ -18,16 +16,12 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
     /* Static variables */
    
     /* This static variable is just to avoid an Eclipse warning.  It serves no other purpose (for us). */
-    
     private static final long serialVersionUID = -266426690684141363L;
-    
-     
-    /* Object fields and methods */
-   
+
     private GameField enclosingGame;  	// A reference back to the Game object that created 'this' object.
     public int mouseX;				// Tracks X position of mouse events
     public int mouseY;				// Tracks Y position of mouse events
-    public boolean mouseIsPressed;	// Determines if mouse has been clicked or not
+    public boolean mouseIsPressed;
     
     /**
      * Creates the GamePanel object (which is really just
@@ -73,22 +67,20 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
     }
     
     /* Overridden methods that report the correct panel size when needed. */
-    
     public Dimension getMinimumSize ()
     {
-        return new Dimension(800,600);
+        return new Dimension(1200,800);
     }
     public Dimension getMaximumSize ()
     {
-        return new Dimension(800,600);
+        return new Dimension(1200,800);
     }
     public Dimension getPreferredSize ()
     {
-        return new Dimension(800,600);
+        return new Dimension(1200,800); //Size cmd đề xuất
     }
 
     /* MouseListener methods */
-    
 	@Override
 	public void mouseClicked(MouseEvent e) 
 	{

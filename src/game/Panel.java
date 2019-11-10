@@ -2,9 +2,7 @@ package game;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.JApplet;
-import javax.swing.JPanel;
 
 public class Panel extends JApplet implements MouseListener
 {
