@@ -4,6 +4,9 @@ import game.Bullet.MaiMoiChet;
 import game.Coordinate;
 import game.Enemies.Enemy;
 import game.GameField;
+import game.ImageLoader;
+import game.Bullet.*;
+
 import java.awt.*;
 import java.util.List;
 
@@ -11,15 +14,14 @@ public class MachineGunTower implements Tower {
     protected Coordinate position;	// holds position of tower
     protected int anchorX;			// shifts X coordinate
     protected int anchorY;			// shifts Y coordinate
-    private Image tower; 			// holds tower image
+    final private Image tower = ImageLoader.getLoader().getImage("resources/MachineGunTower.png");
     protected double timeSinceLastFire;// time since last effect was fired
     private double shootSpeed;
     private long shootRange;		//tầm bắn
     private long damage;			//sát thương
 
-    	protected MachineGunTower(Coordinate position, Image tower, int anchorX, int anchorY, double shootSpeed, long shootRange, long damage){
+    	protected MachineGunTower(Coordinate position, int anchorX, int anchorY, double shootSpeed, long shootRange, long damage){
         this.position = position;
-        this.tower = tower;
         this.anchorX = anchorX;
         this.anchorY = anchorY;
         this.shootRange = shootRange;

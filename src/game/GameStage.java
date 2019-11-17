@@ -5,65 +5,37 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.Scanner;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import game.Enemies.*;
 import game.Towers.*;
 import game.Tile.*;
 
-/*GameStage định nghĩa ra trạng thái bắt đầu của một GameField trong 1 màn chơi */
+/**GameStage định nghĩa ra trạng thái bắt đầu của một GameField trong 1 màn chơi */
 enum GameState { SETUP, UPDATE, DRAW, WAIT, END }
 
 public class GameStage extends GameField
 {
     private GameState state;
-
     private boolean gameIsOver;
-    private boolean nextRound;
-    private int round;
+    private boolean nextRound = false;
+    private int round = 1;
+    private double elapsedTime;
 
-    private double elapsedTime;			// time trackers
-
-    /**
-     * Constructor:  Builds a thread of execution, then starts it
-     * on 'this' object.  This extra thread of execution will be
-     * responsible for doing all the work of creating, running,
-     * and playing the game.
-     * 
-     * (Note:  Drawing the screen happens inside of -another-
-     * thread of execution controlled by Java.  Fortunately, we
-     * don't care, but we are aware that some other threads
-     * do exist.)
-     */
     public GameStage()
     {
         // Game bắt đầu ở trạng thái SETUP
         this.state = GameState.SETUP;
 
-        // Tạo ra một chuỗi thực thi và chạy nó
         Thread t = new Thread(this);
         t.start();
     }
 
     public void run()
     {
-        // Lặp lại vô tận, hoặc cho tới khi người dùng đóng cửa sổ game (bất cứ thứ gì khi nó đến trước)
         while (true)
         {
-            // Test trạng thái game và làm hành động thích hợp        
             if (state == GameState.SETUP)
             {
-                switch (round)
-                {
-                    case 2: doSetupStuff(2); break;
-                    case 3: doSetupStuff(3); break;
-                    case 4: doSetupStuff(4); break;
-                    case 1:
-                    default: doSetupStuff(1);
-                }
-                if (nextRound == true){
-                    round++;
-                    nextRound = false;
-                }
+                doSetupStuff();
             }
             else if (state == GameState.UPDATE)
             {
@@ -71,117 +43,86 @@ public class GameStage extends GameField
             }
             else if (state == GameState.DRAW)
             {
-                // We don't actually force the drawing to happen.
-                //   Instead, we 'request' it of the panel.
+                gamePanel.repaint();
 
-                gamePanel.repaint();  // redraw screen
-
-                // We must wait for the drawing.  It will happen at some time in the near future.
-                //   Since we are in an infinite loop, we could just loop until we leave the draw
-                //   state.  This would waste battery life on a low power device, so instead
-                //   I choose to sleep the current thread for a very short while (so that it
-                //   will be briefly inactive).
-                
                 try { Thread.sleep(5); } catch (Exception e) {}
-                
-                // Do not advance the state here.  The 'draw' method will advance the state after it draws.
             }
             else if (state == GameState.WAIT)
             {
-                // Wait 1/10th a second.  This code is not ideal, we'll explore a better way soon.
-                
-                try { Thread.sleep(100); } catch (Exception e) {}
-                
-                // Drawing is complete, waiting is complete.  It is time to move
-                //   the objects in the game again.  Re-enter the UPDATE state.
-                
+                try { Thread.sleep(100); } catch (Exception e) {}   //1/10th (s)
                 state = GameState.UPDATE;
             }
-            
             else if (state == GameState.END)
             {
-                // Do cleanup if any.  (We don't need to do anything here yet.)
+
             }
         }
     }
-    
-    /**
-     * Hàm setup đồ thực hiện khi game ở trạng thái UPDATE.
-     * It just sets up a game, then enters any valid game state.
-     */
-    private void doSetupStuff(int round)
+
+    /**Hàm setup đồ thực hiện khi game ở trạng thái UPDATE*/
+    private void doSetupStuff()
     {
-        // Create the JFrame and the JPanel
         JFrame f = new JFrame("Game Tower Defense by Vũ Văn Định");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setContentPane(gamePanel);
         f.pack();
-        f.setVisible(true); 
-            
-    	// creates a new ImageLoader object and loads the background image
-		ImageLoader loader = ImageLoader.getLoader();
-		if (round == 1){
-            backdrop = loader.getImage("resources/background2.jpg");
+        f.setVisible(true);
+
+        killsCounter = 0;
+
+        if (nextRound) {
+            if (round == 4){
+                state = GameState.DRAW;
+                return;
+            }
+            round++;
+            nextRound = false;
         }
-		else if (round == 2){
-            backdrop = loader.getImage("resources/background2.jpg");
+
+        if (round == 2){
+            backdrop = ImageLoader.getLoader().getImage("resources/background2.jpg");
+            livesCounter = 20;
+            scoreCounter = 300;
+
+            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("resources/path1round2.txt");
+            line1 = new Road(new Scanner(inputStream));
+            inputStream = this.getClass().getClassLoader().getResourceAsStream("resources/path2round2.txt");
+            line2 = new Road(new Scanner(inputStream));
         }
         else if (round == 3){
-            backdrop = loader.getImage("resources/background3.jpg");
+            backdrop = ImageLoader.getLoader().getImage("resources/background3.jpg");
+            livesCounter = 20;
+            scoreCounter = 300;
+            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("resources/path1round3.txt");
+            line1 = new Road(new Scanner(inputStream));
+            inputStream = this.getClass().getClassLoader().getResourceAsStream("resources/path2round3.txt");
+            line2 = new Road(new Scanner(inputStream));
+        }
+        else if (round == 4){
+            backdrop = ImageLoader.getLoader().getImage("resources/background4.jpg");
+            livesCounter = 20;
+            scoreCounter = 300;
+
+            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("resources/path1round4.txt");
+            line1 = new Road(new Scanner(inputStream));
+            inputStream = this.getClass().getClassLoader().getResourceAsStream("resources/path2round4.txt");
+            line2 = new Road(new Scanner(inputStream));
         }
         else{
-            backdrop = loader.getImage("resources/background4.jpg");
+            backdrop = ImageLoader.getLoader().getImage("resources/background1.jpg");
+            livesCounter = 20;
+            scoreCounter = 300;
+
+            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("resources/path1round1.txt");
+            line1 = new Road(new Scanner(inputStream));
+            inputStream = this.getClass().getClassLoader().getResourceAsStream("resources/path3round1.txt");
+            line2 = new Road(new Scanner(inputStream));
         }
-        
-        // fill counters
-        livesCounter = 20;
-        scoreCounter = 500;
-        killsCounter = 0;
 
         frameCounter = 0;
         lastTime = System.currentTimeMillis();
-        
-        // Use the loader to build a scanner on the path data text file, then build the 
-        // path points object from the data in the file.
-		ClassLoader myLoader = this.getClass().getClassLoader();
 
-		String nameStr = "";
-		if (round == 1) {
-            int random = getRandomNumberInRange(1,3);
-		    switch (random) {
-                case 1: nameStr = "resources/path2round2.txt"; break;
-                case 2: nameStr = "resources/path2round2.txt"; break;
-                case 3: nameStr = "resources/path2round2.txt"; break;
-            }
-        }
-		else if (round == 2) {
-            int random = getRandomNumberInRange(1,2);
-            switch (random) {
-                case 1: nameStr = "resources/path1round2.txt"; break;
-                case 2: nameStr = "resources/path2round2.txt"; break;
-            }
-        }
-        else if (round == 3) {
-            int random = getRandomNumberInRange(1,3);
-            switch (random) {
-                case 1: nameStr = "resources/path1round3.txt"; break;
-                case 2: nameStr = "resources/path2round3.txt"; break;
-                case 3: nameStr = "resources/path3round3.txt"; break;
-            }
-        }
-        else {
-            int random = getRandomNumberInRange(1,3);
-            switch (random) {
-                case 1: nameStr = "resources/path1round4.txt"; break;
-                case 2: nameStr = "resources/path2round4.txt"; break;
-                case 3: nameStr = "resources/path3round4.txt"; break;
-            }
-        }
-        InputStream pointStream = myLoader.getResourceAsStream(nameStr);
-        Scanner s = new Scanner (pointStream);
-        line = new Road(s);
-
-        enemies = new LinkedList<game.Enemies.Enemy>();
+        enemies = new LinkedList<Enemy>();
         towers = new LinkedList<Tower>();
         effects = new LinkedList<Effect>();
         
@@ -189,46 +130,34 @@ public class GameStage extends GameField
         placingMachineGunTower = false;
         newMachineGunTower = null;
 
-        // initialize
         placingNormalTower = false;
         newNormalTower = null;
-        
-        // initialize
+
         placingSniperTower = false;
         newSniperTower = null;
-        	
-        // initialize
+
         this.gameIsOver = false;
-    	this.nextRound = false;
         
         // Change the game state to start the game.
-        state = GameState.UPDATE;  // You could also enter the 'DRAW' state.
+        state = GameState.UPDATE;
     }
-    
-    /**
-     * This function is called repeatedly (once per game 'frame').
-     * The update function should change the positions of objects in the game.
-     * (It could also add new enemies, detect collisions, etc.)  This
-     * function is responsible for the 'physics' of the game.
-     */
+
     private void doUpdateTasks()
-    {	
+    {
     	if(gameIsOver){
             state = GameState.DRAW;
     		return;
     	}
     	
     	if(nextRound){
-            state = GameState.DRAW;
+            state = GameState.SETUP;
     		return;
     	}
     	
     	// See how long it was since the last frame.
-        long currentTime = System.currentTimeMillis();  // Integer number of milliseconds since 1/1/1970.
+        long currentTime = System.currentTimeMillis();
         elapsedTime = ((currentTime - lastTime) / 1000.0);  // Tính số giây đã trôi qua
         lastTime = currentTime;  // Our current time is the next frame's last time
-    	
-        /* I think my elapsed time may be wrong */
         
     	// for each tower, interact in this game
     	for(Tower t: new LinkedList<Tower>(towers))
@@ -271,13 +200,22 @@ public class GameStage extends GameField
     		livesCounter = 0;
     	}
     	
-    	if(killsCounter >= 300)
-    	{	nextRound = true;
-    		killsCounter = 300;
+    	if(round == 1 && killsCounter >= 8)
+    	{
+    	    nextRound = true;
+    		killsCounter = 0;
     	}
-    	
-        // After we have updated the objects in the game, we need to
-        //   redraw them.  Enter the 'DRAW' state.
+    	else if (round == 2 && killsCounter >= 10){
+    	    nextRound = true;
+    	    killsCounter = 0;
+        }
+        else if (round == 3 && killsCounter >= 12){
+            nextRound = true;
+            killsCounter = 0;
+        }
+        else if (round == 4 && killsCounter >= 10){
+            nextRound = true;
+        }
         
         state = GameState.DRAW;
        
@@ -285,36 +223,23 @@ public class GameStage extends GameField
         //   may execute.  Don't do any further updating.
     }
 
-        /**
-     * Draws all the game objects, then enters the wait state.
-     * 
-     * @param g a valid graphics object.
-     */
     public void draw(Graphics g)
     {
-        // Nếu game không ở trạng thái vẽ thì không vẽ gì!
         if (state != GameState.DRAW)
             return;
-        	
-        // Vẽ hình nền.
+
         g.drawImage(backdrop, 0, 0, null);
-     
-        // Vẽ đường đi
-        g.setColor(new Color (0,76, 153));
-        int[] xPos = new int[]{0, 64, 118, 251, 298, 344, 396, 416, 437, 459, 460, 498, 542, 600, 600, 568, 535, 509, 490, 481, 456, 414, 345, 287, 227, 98, 0};
-        int[] yPos = new int[]{329, 316, 291, 189, 163, 154, 165, 186, 233, 344, 364, 415, 444, 461, 410, 396, 372, 331, 226, 195, 151, 117, 105, 117, 143, 244, 280};
-        g.fillPolygon(xPos, yPos, 27);
         
         // Vẽ đích đến
-        g.setColor(new Color(0,255,136));
-        g.fillArc(450, 385, 100, 100, 90, 180);
-        g.setColor(Color.GREEN);
-        int[] xCor = new int[]{600, 588, 574, 566, 557, 557, 563, 572, 576, 584, 600};
-        int[] yCor = new int[]{459, 464, 462, 453, 454, 448, 438, 435, 422, 414, 415};
-        g.fillPolygon(xCor, yCor, 11);
+//        g.setColor(new Color(0,255,136));
+//        g.fillArc(450, 385, 100, 100, 90, 180);
+//        g.setColor(Color.GREEN);
+//        int[] xCor = new int[]{600, 588, 574, 566, 557, 557, 563, 572, 576, 584, 600};
+//        int[] yCor = new int[]{459, 464, 462, 453, 454, 448, 438, 435, 422, 414, 415};
+//        g.fillPolygon(xCor, yCor, 11);
         
         // Vẽ đường thẳng dọc theo đường
-        line.drawLine(g);
+//        line.drawLine(g);
         
         // Vẽ tất cả quân địch trước thanh Menu
     	for(Enemy e: new LinkedList<Enemy>(enemies))
@@ -335,39 +260,27 @@ public class GameStage extends GameField
         // Viết điểm số và đếm mạng trên thanh Menu Bar
         g.setColor(Color.BLACK);
         g.setFont(new Font("Consolas", Font.PLAIN, 16));
-        g.drawString("Số mạng: " + livesCounter, 605, 100);	// lives counter
-        g.drawString("Money Earned: " + scoreCounter, 605, 150);	// score counter
-        g.drawString("Enemies Stopped: " + killsCounter, 605, 200);
-        g.drawString("Blackhole Cost: 100", 610, 380);				// cost for black hole towers
-        g.drawString("Sun Cost: 300", 640, 530);					// cost for sun towers
+        g.drawString("Số mạng: " + livesCounter, 750, 100);	// lives counter
+        g.drawString("Số tiền: " + scoreCounter, 745, 150);	// score counter
+        g.drawString("Số địch bị giết: " + killsCounter, 710, 200);
+        g.drawString("Cost: 100", 610, 380);				// cost for black hole towers
+        g.drawString("Cost: 300", 640, 530);					// cost for sun towers
         g.setFont(new Font("Lucidia Sans", Font.ITALIC, 28));		
-        g.drawString("Planet Defense", 600, 50);					// writes title
-        g.drawLine(600, 50, 800, 50);								// underscore
-        g.drawString("Towers", 640, 240);							// writes towers
-        g.drawLine(620, 240, 780, 240);								// underscore	
-        
-        // draw box around Machine Gun Tower icon
-        g.setColor(new Color(224, 224, 224));
-        g.fillRect(650, 250, 100, 100);
-        
+        g.drawString("Thông tin Game", 700, 50);
+        g.drawLine(700, 50, 900, 50);								// underscore
+        g.drawString("Towers", 750, 240);
+        g.drawLine(750, 240, 850, 240);								// underscore
+
         // draw tower in menu area
-        MachineGunTower machineGunTower = new MachineGunTower(new Coordinate(700, 300));
+        MachineGunTower machineGunTower = new MachineGunTower(new Coordinate(810, 270));
         machineGunTower.draw(g);
 
-        // draw box around Normal Tower icon
-        g.setColor(new Color(224, 224, 224));
-        g.fillRect(660, 270, 110, 100);
+        // draw tower in menu area
+        NormalTower normalTower = new NormalTower(new Coordinate(730, 270));
+        normalTower.draw(g);
 
         // draw tower in menu area
-        NormalTower normalTower = new NormalTower(new Coordinate(700, 300));
-        normalTower.draw(g);
-        
-        // draw box around Sniper Tower icon
-        g.setColor(new Color(224, 224, 224));
-        g.fillRect(650, 400, 100, 100);
-        
-        // draw tower in menu area
-        SniperTower sniperTower = new SniperTower(new Coordinate(700, 450));
+        SniperTower sniperTower = new SniperTower(new Coordinate(770, 340));
         sniperTower.draw(g);
         
         // draws machine gun tower object with mouse movements
@@ -381,16 +294,15 @@ public class GameStage extends GameField
         // draws sniper tower object with mouse movements
         if(newSniperTower != null)
         	newSniperTower.draw(g);
-        
-        ImageLoader loader = ImageLoader.getLoader();	
-		Image endGame = loader.getImage("resources/game_over.png"); // load game over image
-    	
-        if(livesCounter <= 0)										// if game is lost
-        	g.drawImage(endGame, 0, 0, null);						// draw "game over"
 
-		if(killsCounter >= 500)										// if game is lost
-		{	g.setFont(new Font("Braggadocio", Font.ITALIC, 90));		
-        	g.drawString("You Win!!!", 10, 250);					// draw "game over"
+        if(livesCounter <= 0)
+        	g.drawImage(ImageLoader.getLoader().getImage("resources/game_over.png"), 0, 0, null);
+
+		if(round >= 4 && nextRound)
+		{
+            g.drawImage(ImageLoader.getLoader().getImage("resources/winGame.png"), 0, 0, null);
+        	state = GameState.END;
+        	return;
 		}
 		
         // Drawing is now complete.  Enter the WAIT state to create a small
@@ -401,7 +313,6 @@ public class GameStage extends GameField
     
     /**
      * Generates a stream of enemies
-     * 
      */
      @Override
     public void generateEnemies()
@@ -409,56 +320,104 @@ public class GameStage extends GameField
     	// adds enemies to list dependent on how many frames have passed
     	if(frameCounter % 30 == 0)								// slow 
     	{
-    		enemies.add(new NormalEnemy(line.getStart()));
+    	    int random = getRandomNumberInRange(1,2);
+    	    if (random == 1) {
+                enemies.add(new NormalEnemy(line1.getStart()));
+            } else {
+    	        enemies.add(new NormalEnemy(line2.getStart()));
+            }
     	}
  		else if(frameCounter % 25 == 0 && frameCounter >= 50)	// slow
  		{
- 			enemies.add(new NormalEnemy(line.getStart()));
+            int random = getRandomNumberInRange(1,2);
+            if (random == 1) {
+                enemies.add(new NormalEnemy(line1.getStart()));
+            } else {
+                enemies.add(new NormalEnemy(line2.getStart()));
+            }
  		}
 	 	else if(frameCounter % 20 == 0 && frameCounter >= 100)	// medium
 	 	{
-	 		enemies.add(new NormalEnemy(line.getStart()));
-	 		enemies.add(new TankerEnemy(line.getStart()));
+            int random = getRandomNumberInRange(1,2);
+            if (random == 1) {
+                enemies.add(new NormalEnemy(line1.getStart()));
+                enemies.add(new TankerEnemy(line1.getStart()));
+            } else {
+                enemies.add(new NormalEnemy(line2.getStart()));
+                enemies.add(new TankerEnemy(line2.getStart()));
+            }
 	 	}	
  		else if(frameCounter % 15 == 0 && frameCounter >= 150)	// medium
  		{
- 			enemies.add(new NormalEnemy(line.getStart()));
- 			enemies.add(new TankerEnemy(line.getStart()));
+            int random = getRandomNumberInRange(1,2);
+            if (random == 1) {
+                enemies.add(new NormalEnemy(line1.getStart()));
+                enemies.add(new TankerEnemy(line1.getStart()));
+            } else {
+                enemies.add(new NormalEnemy(line2.getStart()));
+                enemies.add(new TankerEnemy(line2.getStart()));
+            }
+
+// 			enemies.add(new NormalEnemy(line.getStart()));
+// 			enemies.add(new TankerEnemy(line.getStart()));
  		}
 	 	else if(frameCounter % 10 == 0 && frameCounter >= 200)	// fast
 	 	{
-	 		enemies.add(new NormalEnemy(line.getStart()));
-	 		enemies.add(new TankerEnemy(line.getStart()));
-	 		enemies.add(new BossEnemy(line.getStart()));
+            int random = getRandomNumberInRange(1,2);
+            if (random == 1) {
+                enemies.add(new NormalEnemy(line1.getStart()));
+                enemies.add(new TankerEnemy(line1.getStart()));
+                enemies.add(new BossEnemy(line1.getStart()));
+            } else {
+                enemies.add(new NormalEnemy(line2.getStart()));
+                enemies.add(new TankerEnemy(line2.getStart()));
+                enemies.add(new BossEnemy(line2.getStart()));
+            }
+
+//	 		enemies.add(new NormalEnemy(line.getStart()));
+//	 		enemies.add(new TankerEnemy(line.getStart()));
+//	 		enemies.add(new BossEnemy(line.getStart()));
 	 	}
 	 	else if(frameCounter % 5 == 0 && frameCounter >= 250)	// fast
 	 	{
-	 		enemies.add(new NormalEnemy(line.getStart()));
-	 		enemies.add(new TankerEnemy(line.getStart()));
-	 		enemies.add(new BossEnemy(line.getStart()));
+            int random = getRandomNumberInRange(1,2);
+            if (random == 1) {
+                enemies.add(new NormalEnemy(line1.getStart()));
+                enemies.add(new TankerEnemy(line1.getStart()));
+                enemies.add(new BossEnemy(line1.getStart()));
+            } else {
+                enemies.add(new NormalEnemy(line2.getStart()));
+                enemies.add(new TankerEnemy(line2.getStart()));
+                enemies.add(new BossEnemy(line2.getStart()));
+            }
+
+//	 		enemies.add(new NormalEnemy(line.getStart()));
+//	 		enemies.add(new TankerEnemy(line.getStart()));
+//	 		enemies.add(new BossEnemy(line.getStart()));
 	 	}
     }
 
      @Override
     public void placeMachineGunTower()
     {
-    	/* I need to make it so you can't place towers on path or off the screen */
+    	/* Tạo để tránh đặt tháp trên đường đi hoặc ngoài màn hình */
     	
     	 // variable to hold mouse location
     	Coordinate mouseLocation = new Coordinate(gamePanel.mouseX, gamePanel.mouseY);
     	
     	// moves the tower object as mouse moves
-    	if(gamePanel.mouseX > 650 && gamePanel.mouseX < 750 && 
-    		gamePanel.mouseY > 250 && gamePanel.mouseY < 350 && 
+    	if(gamePanel.mouseX > 770 && gamePanel.mouseX < 850 &&
+    		gamePanel.mouseY > 230 && gamePanel.mouseY < 310 &&
     		gamePanel.mouseIsPressed && scoreCounter >= 100)
-    	{	// if mouse is pressed on tower icon, create a new object
+    	{
 	    		placingMachineGunTower = true;
 	    		newMachineGunTower = new MachineGunTower(mouseLocation);
     	}    
-    	else if(gamePanel.mouseX > 0 && gamePanel.mouseX < 600 && 
-        	gamePanel.mouseY > 0 && gamePanel.mouseY < 600 && 
+    	else if(gamePanel.mouseX > 0 && gamePanel.mouseX < 700 &&
+        	gamePanel.mouseY > 0 && gamePanel.mouseY < 405 &&
         	gamePanel.mouseIsPressed && placingMachineGunTower
-        	&& line.distanceToPath(gamePanel.mouseX, gamePanel.mouseY) > 60)
+        	&& line1.distanceToPath(gamePanel.mouseX, gamePanel.mouseY) > 40
+            && line2.distanceToPath(gamePanel.mouseX, gamePanel.mouseY) > 40)
     	{	// if mouse is pressed on game screen, place tower on game screen
 	    		newMachineGunTower.setPosition(mouseLocation);
 	    		towers.add(new MachineGunTower(mouseLocation));
@@ -467,7 +426,7 @@ public class GameStage extends GameField
 	    		placingMachineGunTower = false;
     	}
     	
-    	// moves tower object with mouse movements
+    	// đặt tháp xuống vị trí click chuột
     	if(newMachineGunTower != null)
     	{
     		newMachineGunTower.setPosition(mouseLocation);
@@ -482,20 +441,22 @@ public class GameStage extends GameField
         // variable to hold mouse location
         Coordinate mouseLocation = new Coordinate(gamePanel.mouseX, gamePanel.mouseY);
 
-        // moves the tower object as mouse moves
-        if(gamePanel.mouseX > 650 && gamePanel.mouseX < 750 &&
-                gamePanel.mouseY > 250 && gamePanel.mouseY < 350 &&
+        // nếu chọn tháp
+        if(gamePanel.mouseX > 690 && gamePanel.mouseX < 770 &&
+                gamePanel.mouseY > 230 && gamePanel.mouseY < 310 &&
                 gamePanel.mouseIsPressed && scoreCounter >= 100)
-        {	// if mouse is pressed on tower icon, create a new object
-            placingMachineGunTower = true;
+        {
+            placingNormalTower = true;
             newNormalTower = new NormalTower(mouseLocation);
         }
-        else if(gamePanel.mouseX > 0 && gamePanel.mouseX < 600 &&
-                gamePanel.mouseY > 0 && gamePanel.mouseY < 600 &&
+        else if(gamePanel.mouseX > 0 && gamePanel.mouseX < 700 &&
+                gamePanel.mouseY > 0 && gamePanel.mouseY < 405 &&
                 gamePanel.mouseIsPressed && placingNormalTower
-                && line.distanceToPath(gamePanel.mouseX, gamePanel.mouseY) > 60)
-        {	// if mouse is pressed on game screen, place tower on game screen
-            newMachineGunTower.setPosition(mouseLocation);
+                && line1.distanceToPath(gamePanel.mouseX, gamePanel.mouseY) > 40
+                && line2.distanceToPath(gamePanel.mouseX, gamePanel.mouseY) > 40)
+        {
+            // nếu vị trí chọn hợp lí
+            newNormalTower.setPosition(mouseLocation);
             towers.add(new NormalTower(mouseLocation));
             scoreCounter -= 100;
             newNormalTower = null;
@@ -512,23 +473,21 @@ public class GameStage extends GameField
      @Override
     public void placeSniperTower()
     {
-    	/* I need to make it so you can't place towers on path or off the screen */
-    	
-    	 // variable to hold mouse location
     	Coordinate mouseLocation = new Coordinate(gamePanel.mouseX, gamePanel.mouseY);
     	
     	// moves the tower object as mouse moves
-    	if(gamePanel.mouseX > 650 && gamePanel.mouseX < 750 && 
-    		gamePanel.mouseY > 400 && gamePanel.mouseY < 500 && 
+    	if(gamePanel.mouseX > 730 && gamePanel.mouseX < 810 &&
+    		gamePanel.mouseY > 300 && gamePanel.mouseY < 380 &&
     		gamePanel.mouseIsPressed && scoreCounter >= 300)
-    	{	// if mouse is pressed on tower icon, create a new object
+    	{
 	    		placingSniperTower = true;
 	    		newSniperTower = new SniperTower(mouseLocation);
     	}    
-    	else if(gamePanel.mouseX > 0 && gamePanel.mouseX < 600 && 
-        	gamePanel.mouseY > 0 && gamePanel.mouseY < 600 && 
+    	else if(gamePanel.mouseX > 0 && gamePanel.mouseX < 700 &&
+        	gamePanel.mouseY > 0 && gamePanel.mouseY < 405 &&
         	gamePanel.mouseIsPressed && placingSniperTower
-        	&& line.distanceToPath(gamePanel.mouseX, gamePanel.mouseY) > 60)
+        	&& line1.distanceToPath(gamePanel.mouseX, gamePanel.mouseY) > 40
+            && line2.distanceToPath(gamePanel.mouseX, gamePanel.mouseY) > 40)
     	{	// if mouse is pressed on game screen, place tower on game screen
 	    		newSniperTower.setPosition(mouseLocation);
 	    		towers.add(new SniperTower(mouseLocation));
@@ -546,17 +505,5 @@ public class GameStage extends GameField
 
     private static int getRandomNumberInRange(int min, int max) {
         return (new java.util.Random()).nextInt((max - min) + 1) + min;
-    }
-
-    public static void main (String[] args)
-    {
-        /** Just create a game object.  The game constructor
-        *   will do the rest of the work.*/
-
-        new GameStage();
-
-        /** Main exits, but our other thread of execution
-        *   will keep going.  We could do other work here if
-        *   needed.*/
     }
 }

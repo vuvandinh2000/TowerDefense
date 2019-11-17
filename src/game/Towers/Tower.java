@@ -14,25 +14,6 @@ import game.GameTile;
  */
 public interface Tower extends GameTile
 {
-	/* instance variables */
-//	protected Coordinate position;	// holds position of tower
-//	protected int anchorX;			// shifts X coordinate
-//	protected int anchorY;			// shifts Y coordinate
-//	private Image tower; 			// holds tower image
-//	protected double timeSinceLastFire;// time since last effect was fired
-//	private double shootSpeed;
-//	private long shootRange;		//tầm bắn
-//	private long damage;			//sát thương
-
-//	protected Tower(Coordinate position, Image tower, int anchorX, int anchorY, double shootSpeed, long shootRange, long damage){
-//		this.position = position;
-//		this.tower = tower;
-//		this.anchorX = anchorX;
-//		this.anchorY = anchorY;
-//		this.shootRange = shootRange;
-//		this.shootSpeed = shootSpeed;
-//		this.damage = damage;
-//	}
 	
 	public abstract void draw(Graphics g);
 

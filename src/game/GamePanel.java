@@ -6,32 +6,13 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import javax.swing.JPanel;
 
-/**
- * The GamePanel class represents the drawable area on the screen.
- * This class is kept simple, and can be used as-is.
- * @author Dinh Jylee
- */
 public class GamePanel extends JPanel implements MouseListener, MouseMotionListener
 {
-    /* Static variables */
-   
-    /* This static variable is just to avoid an Eclipse warning.  It serves no other purpose (for us). */
-    private static final long serialVersionUID = -266426690684141363L;
-
     private GameField enclosingGame;  	// A reference back to the Game object that created 'this' object.
     public int mouseX;				// Tracks X position of mouse events
     public int mouseY;				// Tracks Y position of mouse events
     public boolean mouseIsPressed;
-    
-    /**
-     * Creates the GamePanel object (which is really just
-     * a JPanel object with a little extra functionality.)
-     * The GamePanel represents a drawable area on the screen.
-     * It has a paint method, and we can listen for events on this
-     * object if we want.
-     * 
-     * @param enclosingGame the Game object that is creating this panel
-     */
+
     public GamePanel (GameField enclosingGame)
     {
         // Keep track of the Game object that created this panel.
@@ -41,43 +22,29 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
     	this.addMouseMotionListener(this);		// Listen to mouse movements
         this.enclosingGame = enclosingGame;
     }
-    
-    /**
-     * Redraws the panel.  The panel does not have access to any of the objects
-     * in the game.  (The panel does not have a path object, or a snail object, etc.)
-     * This means the panel cannot directly draw them.  Instead, we'll just have
-     * our panel call back to the Game object, and let the Game object draw
-     * everything.
-     * 
-     * @param g  the Graphics object that corresponds to the panel
-     */
+
     public void paintComponent (Graphics g)
     {
-        enclosingGame.draw (g);
+        enclosingGame.draw(g);
     }
-    
-    /**
-     * returns X & Y coordinates of mouse
-     * 
-     * @return
-     */
+
     public Coordinate getCoordinate()
     {
     	return new Coordinate(mouseX, mouseY);
     }
     
     /* Overridden methods that report the correct panel size when needed. */
-    public Dimension getMinimumSize ()
+    public Dimension getMinimumSize()
     {
-        return new Dimension(1200,800);
+        return new Dimension(50,50);
     }
-    public Dimension getMaximumSize ()
+    public Dimension getMaximumSize()
     {
-        return new Dimension(1200,800);
+        return new Dimension(50,50);
     }
     public Dimension getPreferredSize ()
     {
-        return new Dimension(1200,800); //Size cmd đề xuất
+        return new Dimension(900,405); //Size hiển thị
     }
 
     /* MouseListener methods */
@@ -117,10 +84,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 		mouseX = e.getX();
 		mouseY = e.getY();
 		mouseIsPressed = true;
-		
 	}
-
-	/* MouseMotionListener methods */
 	
 	@Override
 	public void mouseDragged(MouseEvent e) 
@@ -136,6 +100,5 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 		mouseX = e.getX();
 		mouseY = e.getY();
 		mouseIsPressed = false;
-
 	}
 }

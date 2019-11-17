@@ -2,16 +2,10 @@ package game;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
 import game.Enemies.Enemy;
 
-/**
- * Abstract class which all Effects will inherit from
- * 
- * @author basilvetas
- */
 abstract public class Effect 
 {
 	/* Fields */
@@ -44,7 +38,7 @@ abstract public class Effect
 			
 			//if enemy is in range of effect, destroy enemy
 			if(distance < 40)
-			{	
+			{
 				game.enemies.remove(e);
 				game.scoreCounter += 3;
 				game.killsCounter++;
@@ -58,8 +52,8 @@ abstract public class Effect
 		g.drawImage(picture, posX, posY, null);
 		
 		// Draws dot on Effect's (x, y) coordinates
-		g.setColor(Color.WHITE);
-		g.fillOval(posX, posY, 5, 5);
+//		g.setColor(Color.WHITE);
+//		g.fillOval(posX, posY, 5, 5);
 	}
 	
 	public boolean isDone()

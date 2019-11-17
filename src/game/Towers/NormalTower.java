@@ -1,10 +1,11 @@
 package game.Towers;
 
 import game.Bullet.BinhThuong;
-import game.Bullet.MaiMoiChet;
 import game.Coordinate;
 import game.Enemies.Enemy;
 import game.GameField;
+import game.ImageLoader;
+
 import java.awt.*;
 import java.util.List;
 
@@ -12,15 +13,14 @@ public class NormalTower implements Tower {
     protected Coordinate position;	// holds position of tower
     protected int anchorX;			// shifts X coordinate
     protected int anchorY;			// shifts Y coordinate
-    private Image tower; 			// holds tower image
+    final private Image tower = ImageLoader.getLoader().getImage("resources/NormalTower.png");
     protected double timeSinceLastFire;// time since last effect was fired
     private double shootSpeed;
     private long shootRange;		//tầm bắn
     private long damage;			//sát thương
 
-    public NormalTower(Coordinate position, Image tower, int anchorX, int anchorY, double shootSpeed, long shootRange, long damage){
+    public NormalTower(Coordinate position, int anchorX, int anchorY, double shootSpeed, long shootRange, long damage){
         this.position = position;
-        this.tower = tower;
         this.anchorX = anchorX;
         this.anchorY = anchorY;
         this.shootRange = shootRange;
@@ -43,8 +43,8 @@ public class NormalTower implements Tower {
         g.drawImage(tower, position.getX() + anchorX, position.getY() + anchorY, null);
 
         // Draws dot on Enemy's (x, y) coordinates
-//		g.setColor(Color.WHITE);
-//		g.fillOval(position.getX(), position.getY(), 5, 5);
+		g.setColor(Color.WHITE);
+		g.fillOval(position.getX(), position.getY(), 5, 5);
     }
 
     @Override

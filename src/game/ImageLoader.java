@@ -9,10 +9,9 @@ import javax.imageio.ImageIO;
 
 public class ImageLoader 
 {
-	private Map<String, Image> imageBank;	//declares a map to hold images
+	private Map<String, Image> imageBank;
 	private static ImageLoader instance;
 
-	//Hàm constructor mặc định tạo ra một Map dạng TreeMap
 	private ImageLoader()
 	{
 		imageBank = new TreeMap<String, Image>();
@@ -22,7 +21,7 @@ public class ImageLoader
 	{	
 		if(instance == null)
 			instance = new ImageLoader();
-		return instance;	// gets the image loader object
+		return instance;
 	}
 
 	public Image getImage(String pic)
@@ -30,8 +29,8 @@ public class ImageLoader
 		Image loaded = null;
 		
 		// Tránh 1 bức bị load 2 lần
-		if(imageBank.containsKey(pic))	// nếu bức ảnh đã tồn tại trong map
-			return imageBank.get(pic);	// return chính bức ảnh đó
+		if(imageBank.containsKey(pic))
+			return imageBank.get(pic);
 		else
 		{
 			try
@@ -52,7 +51,7 @@ public class ImageLoader
 			
 			imageBank.put(pic, loaded);	// Adds key và bức ảnh vào map
 			
-			return loaded;	// returns the specified image 
+			return loaded;
 		}
 	}
 }

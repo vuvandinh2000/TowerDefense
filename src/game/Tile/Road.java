@@ -6,63 +6,43 @@ import java.util.*;
 import game.Coordinate;
 import game.PathPosition;
 
-/**
- * /**
- * A PathPoints object represents a list of coordinates along a path.
- * This is really just a helper class for loading path points,
- * drawing the path, and for creating coordinates at the start of a path.
- * It serves no other purpose.
- */
 public class Road extends Tile
 {
     // Each PathPoints object will have a list of coordinates:
     private List <Coordinate> path;
 
-    /** This constructor does the following:
-     *     - It creates a new ArrayList to hold the path coordinates,
-     *          and stores it in the path variable.
-     *     - It reads a number of coordinates, c, from the scanner.
-     *     - It loops n times, each time scanning a coordinate pair, building a
-     *         coordinate object, and adding the coordinate object to the path list.    *
-     * @param s  a Scanner set up by the caller to scan through a list of coordinates
-     */
     public Road(Scanner s)
     {
         path = new ArrayList<Coordinate>();		// tạo new ArrayList Coordinates
-        int counter = s.nextInt(); 				// đọc số lượng coordinates từ file path_1.txt
+        int counter = s.nextInt(); 				// đọc số lượng coordinates từ file path.txt
 
-        for(int n = 0; n < counter; n++)		// loops n times
+        for(int n = 0; n < counter; n++)
         {
-            // builds coordinate object
             Coordinate c = new Coordinate(s.nextInt(), s.nextInt());
-            path.add(c);	// adds coordinate object to path list
+            path.add(c);
         }
     }
 
-    public void drawLine(Graphics g)
-    {
-        g.setColor(Color.WHITE);	// sets path color
-
-        for(int n = 0; n < path.size()-1; n++)
-        {	// draws a segment then repeats
-            g.drawLine(path.get(n).x, path.get(n).y, path.get(n+1).x, path.get(n+1).y);
-        }
-    }
+//    public void drawLine(Graphics g)
+//    {
+//        g.setColor(Color.WHITE);
+//
+//        for(int n = 0; n < path.size()-1; n++)
+//        {	// draws a segment then repeats
+//            g.drawLine(path.get(n).x, path.get(n).y, path.get(n+1).x, path.get(n+1).y);
+//        }
+//    }
 
     public PathPosition getStart()
     {
         return new PathPosition(new ArrayList<Coordinate>(path));
     }
 
-    /**
-     * Returns the distance (in pixels) from the
-     * specified point to the nearest path point.
-     */
     public double distanceToPath (double px, double py)
     {
         double minDistance = Double.MAX_VALUE;
 
-        for (int i = 0; i < path.size()-1; i ++)
+        for (int i = 0; i < path.size()-1; i++)
         {
             // Get start and end points for a segment.
 
@@ -79,8 +59,7 @@ public class Road extends Tile
             vx /= vl;
             vy /= vl;
 
-            // Compute vector from start to point
-
+            // Tính khoảng cách từ StartPoint đến Point
             double dx = px - sx;
             double dy = py - sy;
             double dl = Math.sqrt(dx * dx + dy * dy);
@@ -108,5 +87,4 @@ public class Road extends Tile
 
         return minDistance;
     }
-
 }

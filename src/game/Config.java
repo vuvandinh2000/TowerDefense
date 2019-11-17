@@ -2,10 +2,6 @@ package game;
 
 public final class Config {
     /**
-     * Game name. Change it if you want.
-     */
-    public static final String GAME_NAME = "The Game";
-    /**
      * Ticks per second
      */
     public static final long GAME_TPS = 20;

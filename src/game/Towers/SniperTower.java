@@ -6,6 +6,8 @@ import game.Bullet.MaiMoiChet;
 import game.Coordinate;
 import game.Enemies.Enemy;
 import game.GameField;
+import game.ImageLoader;
+
 import java.awt.*;
 import java.util.List;
 
@@ -13,15 +15,14 @@ public class SniperTower implements Tower {
     protected Coordinate position;	// holds position of tower
     protected int anchorX;			// shifts X coordinate
     protected int anchorY;			// shifts Y coordinate
-    private Image tower; 			// holds tower image
+    final private Image tower  = ImageLoader.getLoader().getImage("resources/SniperTower.png");
     protected double timeSinceLastFire;// time since last effect was fired
     private double shootSpeed;
     private long shootRange;		//tầm bắn
     private long damage;			//sát thương
 
-    protected SniperTower(Coordinate position, Image tower, int anchorX, int anchorY, double shootSpeed, long shootRange, long damage){
+    protected SniperTower(Coordinate position, int anchorX, int anchorY, double shootSpeed, long shootRange, long damage){
         this.position = position;
-        this.tower = tower;
         this.anchorX = anchorX;
         this.anchorY = anchorY;
         this.shootRange = shootRange;
@@ -32,9 +33,6 @@ public class SniperTower implements Tower {
     public SniperTower(Coordinate position){
         this.position = position;
     }
-//    public SniperTower(Coordinate position){
-//        this.position = position;
-//    }
 
     @Override
     public void setPosition(Coordinate c){
