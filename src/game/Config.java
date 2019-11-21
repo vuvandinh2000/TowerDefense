@@ -5,10 +5,6 @@ public final class Config {
      * Ticks per second
      */
     public static final long GAME_TPS = 20;
-    /**
-     * Nanoseconds per tick
-     */
-    public static final long GAME_NSPT = Math.round(1000000000.0 / GAME_TPS);
 
     /**
      * Size of the tile, in pixel.

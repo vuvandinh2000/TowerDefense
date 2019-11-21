@@ -1,19 +1,16 @@
 package game.Tile;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.util.*;
 import game.Coordinate;
 import game.PathPosition;
 
 public class Road extends Tile
 {
-    // Each PathPoints object will have a list of coordinates:
     private List <Coordinate> path;
 
     public Road(Scanner s)
     {
-        path = new ArrayList<Coordinate>();		// tạo new ArrayList Coordinates
+        path = new ArrayList<Coordinate>();
         int counter = s.nextInt(); 				// đọc số lượng coordinates từ file path.txt
 
         for(int n = 0; n < counter; n++)

@@ -12,23 +12,22 @@ import java.awt.*;
 import java.util.List;
 
 public class SniperTower implements Tower {
-    protected Coordinate position;	// holds position of tower
-    protected int anchorX;			// shifts X coordinate
-    protected int anchorY;			// shifts Y coordinate
-    final private Image tower  = ImageLoader.getLoader().getImage("resources/SniperTower.png");
+    protected Coordinate position;
+    protected int anchorX;
+    protected int anchorY;
+    final private Image tower = ImageLoader.getLoader().getImage("resources/SniperTower.png");
     protected double timeSinceLastFire;// time since last effect was fired
     private double shootSpeed;
-    private long shootRange;		//tầm bắn
+    final private long shootRange = 200;		//tầm bắn
     private long damage;			//sát thương
 
-    protected SniperTower(Coordinate position, int anchorX, int anchorY, double shootSpeed, long shootRange, long damage){
-        this.position = position;
-        this.anchorX = anchorX;
-        this.anchorY = anchorY;
-        this.shootRange = shootRange;
-        this.shootSpeed = shootSpeed;
-        this.damage = damage;
-    }
+//    protected SniperTower(Coordinate position, int anchorX, int anchorY, double shootSpeed, long shootRange, long damage){
+//        this.position = position;
+//        this.anchorX = anchorX;
+//        this.anchorY = anchorY;
+//        this.shootRange = shootRange;
+//        this.damage = damage;
+//    }
 
     public SniperTower(Coordinate position){
         this.position = position;
@@ -66,26 +65,20 @@ public class SniperTower implements Tower {
         // Gives position of an enemy in enemy list
         for(Enemy e: enemies)
         {
-            // holds position of enemy
             Coordinate enemyPos = e.getPosition().getCoordinate();
 
-            // Compute distance of enemy to tower
-            double dx, dy, dist;	// change in x, y, and total distance
-
-            // calculates change in x and y position
-            dx = enemyPos.x - position.x; // x position of enemy - tower
-            dy = enemyPos.y - position.y; // y position of enemy - tower
-
-            // use Pythagorean theorem to calculate distance
+            double dx, dy, dist;
+            dx = enemyPos.x - position.x;
+            dy = enemyPos.y - position.y;
             dist = Math.sqrt((dx*dx) + (dy*dy));
 
             // holds position of effect
             Coordinate pos = new Coordinate(position.x, position.y);
 
             // if enemy is in range, fire salt
-            if(dist < 100) {
+            if(dist < shootRange) {
                 ChetLuon chetLuon = new ChetLuon(pos, enemyPos);
-                game.effects.add(chetLuon);
+                game.bullet.add(chetLuon);
                 timeSinceLastFire = 0;
                 return;
             }

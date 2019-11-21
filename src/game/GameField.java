@@ -1,5 +1,6 @@
 package game;
 
+import game.Bullet.Bullet;
 import game.Enemies.Enemy;
 import java.awt.*;
 import java.util.List;
@@ -13,27 +14,27 @@ public abstract class GameField implements Runnable
     protected Road line1;
     protected Road line2;
     
-    protected GamePanel gamePanel;		// đối tượng gamePanel
+    protected GamePanel gamePanel;
     
-    protected int frameCounter;			// keeps track of frame updates
-    protected long lastTime;				// keeps track of time
+    protected int frameCounter;
+    protected long lastTime;
 
-    protected boolean placingNormalTower;	// true if tower is being placed
-    protected Tower newNormalTower; 		// variable to hold new tower objects
+    protected boolean placingNormalTower;
+    protected Tower newNormalTower;
 
-    protected boolean placingMachineGunTower;			// true if tower is being placed
+    protected boolean placingMachineGunTower;
     protected Tower newMachineGunTower;
 
-    protected boolean placingSniperTower;			// true if tower is being placed
-    protected Tower newSniperTower; 				// variable to hold new tower objects
+    protected boolean placingSniperTower;
+    protected Tower newSniperTower;
     
-    protected int livesCounter; 					// đếm mạng
-    protected int scoreCounter;					// đếm điểm
-    protected int killsCounter;					// số lượng quân địch đã giết
+    public int livesCounter;
+    public int scoreCounter;
+    public int killsCounter;
 
     public List<Enemy> enemies;
     protected List<Tower> towers;
-    public List<Effect> effects;				// hiệu ứng
+    public List<Bullet> bullet;
 
     public GameField()
     {

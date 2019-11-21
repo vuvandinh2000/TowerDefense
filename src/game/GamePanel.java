@@ -8,18 +8,15 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements MouseListener, MouseMotionListener
 {
-    private GameField enclosingGame;  	// A reference back to the Game object that created 'this' object.
-    public int mouseX;				// Tracks X position of mouse events
-    public int mouseY;				// Tracks Y position of mouse events
+    private GameField enclosingGame;  	// Tham chiếu trở lại đối tượng Game tạo ra đối tượng này
+    public int mouseX;
+    public int mouseY;
     public boolean mouseIsPressed;
 
     public GamePanel (GameField enclosingGame)
     {
-        // Keep track of the Game object that created this panel.
-        //   That way, we can call methods in the game object when needed.
-    	
-    	this.addMouseListener(this); 			// Listen to our own mouse events.
-    	this.addMouseMotionListener(this);		// Listen to mouse movements
+    	this.addMouseListener(this);
+    	this.addMouseMotionListener(this);
         this.enclosingGame = enclosingGame;
     }
 
@@ -32,8 +29,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
     {
     	return new Coordinate(mouseX, mouseY);
     }
-    
-    /* Overridden methods that report the correct panel size when needed. */
+
     public Dimension getMinimumSize()
     {
         return new Dimension(50,50);
@@ -47,7 +43,6 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
         return new Dimension(900,405); //Size hiển thị
     }
 
-    /* MouseListener methods */
 	@Override
 	public void mouseClicked(MouseEvent e) 
 	{

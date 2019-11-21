@@ -16,17 +16,16 @@ public class NormalTower implements Tower {
     final private Image tower = ImageLoader.getLoader().getImage("resources/NormalTower.png");
     protected double timeSinceLastFire;// time since last effect was fired
     private double shootSpeed;
-    private long shootRange;		//tầm bắn
+    final private long shootRange = 60;		//tầm bắn
     private long damage;			//sát thương
 
-    public NormalTower(Coordinate position, int anchorX, int anchorY, double shootSpeed, long shootRange, long damage){
-        this.position = position;
-        this.anchorX = anchorX;
-        this.anchorY = anchorY;
-        this.shootRange = shootRange;
-        this.shootSpeed = shootSpeed;
-        this.damage = damage;
-    }
+//    public NormalTower(Coordinate position, int anchorX, int anchorY, double shootSpeed, long damage){
+//        this.position = position;
+//        this.anchorX = anchorX;
+//        this.anchorY = anchorY;
+//        this.shootSpeed = shootSpeed;
+//        this.damage = damage;
+//    }
 
     public NormalTower(Coordinate position){
         this.position = position;
@@ -79,10 +78,9 @@ public class NormalTower implements Tower {
             // holds position of effect
             Coordinate pos = new Coordinate(position.x, position.y);
 
-            // if enemy is in range, fire salt
-            if(dist < 100) {
+            if(dist < shootRange) {
                 BinhThuong binhThuong = new BinhThuong(pos, enemyPos);
-                game.effects.add(binhThuong);
+                game.bullet.add(binhThuong);
                 timeSinceLastFire = 0;
                 return;
             }

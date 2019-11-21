@@ -38,10 +38,10 @@ public class ImageLoader
 	    		// Tạo ra 1 loader cho file truy cập được lưu trữ ở package resource
 				ClassLoader myLoader = this.getClass().getClassLoader();
 		        
-	    		// Use the loader to read the background image.
+	    		// Dùng loader để đọc ảnh background.
 				InputStream imageStream = myLoader.getResourceAsStream(pic);
 
-				// stores image in 'loaded'
+				// lưu trữ ảnh trên var 'loaded'
 				loaded = ImageIO.read(imageStream);
 					
 			}
